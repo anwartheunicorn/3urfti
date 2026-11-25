@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="motion-safe:scroll-smooth">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>'3urfti — Find your roommate, friends & community</title>
+  <meta name="description" content="'3urfti helps Arab college students find compatible roommates, make friends in your area, or connect near your campus.">
+  <!-- Switch to Arabic before the page draws, so it doesn't flash English first -->
+  <script>try { if (localStorage.getItem("3urfti.lang") === "ar") { document.documentElement.lang = "ar"; document.documentElement.dir = "rtl"; } } catch (e) {}</script>
+  <!-- Dark mode before the page draws (no white flash): your saved choice, or your device's setting -->
+  <script>try { var theme = localStorage.getItem("3urfti.theme"); if (theme === "dark" || (!theme && matchMedia("(prefers-color-scheme: dark)").matches)) document.documentElement.classList.add("dark"); } catch (e) {}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <script src="js/tailwind-config.js"></script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-sand-50 font-sans text-slate-800 antialiased">
+
+  <!-- ===================== TOP BAR ===================== -->
+  <header class="sticky top-0 z-40 border-b border-sand-100 bg-sand-50/85 backdrop-blur">
+    <nav class="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
+      <a href="index.html" class="flex items-center gap-2.5">
+        <span class="grid h-9 w-9 place-items-center rounded-xl bg-brand-600 text-white shadow-md shadow-brand-600/30"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg></span>
+        <span class="leading-none">
+          <span dir="ltr" class="block text-xl font-extrabold tracking-tight text-brand-900">'3urfti</span>
+          <span class="block text-[11px] font-semibold text-sand-600" lang="ar">غرفتي</span>
+        </span>
+      </a>
+      <div class="flex items-center gap-2">
+        <!-- Dark / light mode -->
+        <button type="button" data-theme-toggle class="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-sand-200 bg-white text-brand-800 hover:border-brand-300">
+          <svg class="theme-moon h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+          <svg class="theme-sun h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        </button>
+        <button type="button" data-lang-toggle class="inline-flex items-center gap-1.5 rounded-xl border border-sand-200 bg-white px-3 py-2 text-sm font-semibold text-brand-800 hover:border-brand-300">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>
+          <span data-i18n="lang.switch">العربية</span>
+        </button>
+        <!-- Shown to visitors -->
+        <button type="button" data-auth="guest" data-open="login-modal" class="hidden rounded-xl px-4 py-2 text-sm font-semibold text-brand-800 hover:bg-brand-50 sm:inline-flex" data-i18n="nav.login">Log In</button>
+        <button type="button" data-auth="guest" data-open="signup-modal" class="rounded-xl bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-md shadow-brand-600/25 hover:bg-brand-700" data-i18n="nav.signup">Sign Up</button>
+        <!-- Shown when already logged in -->
+        <a href="dashboard.html" data-auth="user" class="hidden rounded-xl bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-700" data-i18n="nav.dashboard">Go to dashboard</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ===================== HERO (front cover) ===================== -->
+    <section class="relative overflow-hidden bg-gradient-to-br from-brand-50 via-sand-50 to-rose-50">
+      <!-- Soft coloured glows in the background -->
+      <div class="pointer-events-none absolute -top-32 end-[-10rem] h-[28rem] w-[28rem] rounded-full bg-brand-200/60 blur-3xl"></div>
+      <div class="pointer-events-none absolute bottom-[-8rem] start-[-8rem] h-[22rem] w-[22rem] rounded-full bg-sand-200/70 blur-3xl"></div>
+      <div class="pointer-events-none absolute start-1/3 top-1/4 h-64 w-64 rounded-full bg-rose-200/40 blur-3xl"></div>
+      <div class="pointer-events-none absolute -bottom-24 end-1/4 h-72 w-72 rounded-full bg-sky-200/50 blur-3xl"></div>
+
+      <div class="relative mx-auto grid max-w-6xl items-center gap-14 px-4 py-14 sm:px-6 lg:grid-cols-2 lg:py-24">
+        <div>
+          <span class="inline-flex items-center gap-2 rounded-full bg-white px-3.5 py-1.5 text-sm font-semibold text-brand-700 shadow-sm ring-1 ring-brand-100">
+            <span class="wave" aria-hidden="true">👋</span>
+            <span data-i18n="hero.badge">Ahlan wa sahlan! Built for Arab college students</span>
+          </span>
+
+          <h1 class="mt-6 text-4xl font-extrabold leading-[1.15] tracking-tight text-brand-950 sm:text-5xl lg:text-[3.6rem]" data-i18n-html="hero.title">
+            Find your <strong class="font-black text-teal-600">Roommate</strong>, your <span class="text-sky-600">friends</span>, your <span class="text-indigo-600">community</span>
+          </h1>
+
+          <p class="mt-6 max-w-xl text-lg leading-relaxed text-slate-600" data-i18n="hero.desc">
+            '3urfti helps Arab college students find compatible roommates, make friends in your area, or connect near your campus.
+          </p>
+
+          <div class="mt-9 flex flex-col gap-3 sm:flex-row">
+            <button type="button" data-auth="guest" data-open="signup-modal" class="rounded-2xl bg-gradient-to-r from-brand-600 to-sky-600 px-8 py-4 text-lg font-bold text-white shadow-xl shadow-brand-600/30 transition hover:-translate-y-0.5 hover:from-brand-700 hover:to-sky-700" data-i18n="hero.signup">Sign Up</button>
+            <button type="button" data-auth="guest" data-open="login-modal" class="rounded-2xl border-2 border-brand-200 bg-white px-8 py-4 text-lg font-bold text-brand-800 transition hover:-translate-y-0.5 hover:border-brand-400" data-i18n="hero.login">Log In</button>
+            <a href="dashboard.html" data-auth="user" class="hidden rounded-2xl bg-brand-600 px-8 py-4 text-center text-lg font-bold text-white shadow-xl shadow-brand-600/30 hover:bg-brand-700" data-i18n="nav.dashboard">Go to dashboard</a>
+            <a href="#features" class="group inline-flex items-center justify-center gap-2 rounded-2xl px-6 py-4 text-lg font-bold text-brand-700 transition hover:bg-brand-50 hover:text-brand-800"><span data-i18n="hero.learn">Learn more</span><span aria-hidden="true" class="transition group-hover:translate-y-0.5">↓</span></a>
+          </div>
+
+          <ul class="mt-7 flex flex-wrap gap-2 text-sm font-semibold">
+            <li class="inline-flex items-center gap-1.5 rounded-full bg-brand-100 px-3 py-1.5 text-brand-800"><span aria-hidden="true">🔒</span><span data-i18n="hero.trust1">Same-gender matching</span></li>
+            <li class="inline-flex items-center gap-1.5 rounded-full bg-sky-100 px-3 py-1.5 text-sky-800"><span aria-hidden="true">🌍</span><span data-i18n="hero.trust2">English & Arabic</span></li>
+            <li class="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1.5 text-amber-800"><span aria-hidden="true">🎓</span><span data-i18n="hero.trust3">Made for campus life</span></li>
+          </ul>
+        </div>
+
+        <!-- Illustration: two roommates walking to their new home with moving boxes -->
+        <div class="relative mx-auto w-full max-w-md">
+          <div class="absolute inset-3 rotate-[-4deg] rounded-[2.5rem] bg-gradient-to-br from-sand-200 to-rose-200" aria-hidden="true"></div>
+
+          <!-- Little floating tags showing what people bond over -->
+          <span class="float absolute -top-4 start-3 z-10 rotate-[-6deg] rounded-full bg-white px-3.5 py-1.5 text-sm font-bold text-rose-500 shadow-lg" aria-hidden="true" data-i18n="hero.chip1">☕ Coffee buddies</span>
+          <span class="float absolute -end-3 top-[20%] z-10 rotate-[5deg] rounded-full bg-white px-3.5 py-1.5 text-sm font-bold text-sky-600 shadow-lg [animation-delay:-1.3s]" aria-hidden="true" data-i18n="hero.chip2">🎮 Game nights</span>
+          <span class="float absolute -start-3 top-[36%] z-10 rotate-[-4deg] rounded-full bg-white px-3.5 py-1.5 text-sm font-bold text-violet-600 shadow-lg [animation-delay:-2.6s]" aria-hidden="true" data-i18n="hero.chip3">📚 Study partners</span>
+
+          <div class="relative overflow-hidden rounded-[2.25rem] shadow-2xl shadow-brand-900/10">
+            <svg viewBox="0 0 480 400" class="block h-auto w-full" role="img" data-i18n-aria="hero.art" aria-label="Two students walking toward each other on a path to their new home, carrying moving boxes">
+              <!-- Sky (blue fading to a warm sunset), sun and clouds -->
+              <defs>
+                <linearGradient id="hero-sky" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#bfe9f5" />
+                  <stop offset=".55" stop-color="#e6f6f3" />
+                  <stop offset="1" stop-color="#fde3cf" />
+                </linearGradient>
+              </defs>
+              <rect width="480" height="400" fill="url(#hero-sky)" />
+              <circle cx="70" cy="74" r="44" fill="#fde68a" opacity=".5" />
+              <circle cx="70" cy="74" r="28" fill="#fcd34d" />
+              <path d="M360 96a18 18 0 0 1 34-8 14 14 0 0 1 22 12h-56Z" fill="#fff" opacity=".9" />
+              <path d="M130 52a14 14 0 0 1 27-6 11 11 0 0 1 17 9h-44Z" fill="#fff" opacity=".8" />
+
+              <!-- Ground, and the walking path that leads to the front door -->
+              <rect y="320" width="480" height="80" class="fill-sand-200" />
+              <rect y="320" width="480" height="5" class="fill-sand-300" />
+              <!-- Path from the front door down to the sidewalk -->
+              <path d="M206 322h68l10 14H196Z" fill="#e2e8f0" />
+              <!-- Sidewalk: light grey paving with a line between each tile, then a curb -->
+              <rect y="336" width="480" height="22" fill="#e2e8f0" />
+              <path d="M0 336H480" stroke="#cbd5e1" stroke-width="2" />
+              <g stroke="#cbd5e1" stroke-width="2">
+                <path d="M24 336v22M48 336v22M72 336v22M96 336v22M120 336v22M144 336v22M168 336v22M192 336v22M216 336v22M240 336v22M264 336v22M288 336v22M312 336v22M336 336v22M360 336v22M384 336v22M408 336v22M432 336v22M456 336v22" />
+              </g>
+              <rect y="358" width="480" height="5" fill="#94a3b8" />
+              <!-- Road below the sidewalk, with white lane dashes -->
+              <rect y="363" width="480" height="37" fill="#cbd5e1" />
+              <path d="M8 382H472" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-dasharray="18 16" />
+
+              <!-- Trees: a trunk (rectangle) with a leafy top made of overlapping circles -->
+              <g>
+                <!-- Big tree, far left -->
+                <rect x="33" y="262" width="10" height="60" rx="3" fill="#92400e" />
+                <circle cx="38" cy="244" r="26" class="fill-brand-500" />
+                <circle cx="21" cy="260" r="17" class="fill-brand-500" />
+                <circle cx="55" cy="260" r="17" class="fill-brand-500" />
+                <circle cx="30" cy="236" r="9" class="fill-brand-400" />
+                <!-- Big tree, far right -->
+                <rect x="437" y="262" width="10" height="60" rx="3" fill="#92400e" />
+                <circle cx="442" cy="244" r="26" class="fill-brand-500" />
+                <circle cx="425" cy="260" r="17" class="fill-brand-500" />
+                <circle cx="459" cy="260" r="17" class="fill-brand-500" />
+                <circle cx="434" cy="236" r="9" class="fill-brand-400" />
+                <!-- Small trees peeking out from behind the house -->
+                <rect x="139" y="280" width="7" height="42" rx="2" fill="#92400e" />
+                <circle cx="142" cy="268" r="19" class="fill-brand-400" />
+                <circle cx="136" cy="262" r="6" class="fill-brand-300" />
+                <rect x="334" y="280" width="7" height="42" rx="2" fill="#92400e" />
+                <circle cx="337" cy="268" r="19" class="fill-brand-400" />
+                <circle cx="331" cy="262" r="6" class="fill-brand-300" />
+              </g>
+
+              <!-- The house, in the middle. The "scale(1.15)" makes it 15% bigger, growing up from the ground. -->
+              <g transform="translate(240 322) scale(1.15) translate(-240 -322)">
+                <!-- Brick chimney (drawn first so the roof covers its bottom) -->
+                <rect x="268" y="158" width="16" height="34" class="fill-sand-700" />
+                <rect x="265" y="154" width="22" height="6" rx="2" class="fill-brand-800" />
+
+                <!-- Walls, with faint siding lines -->
+                <rect x="182" y="198" width="116" height="106" class="fill-white" />
+                <path d="M182 212H298M182 224H298M182 236H298M182 248H298M182 260H298M182 272H298M182 284H298M182 296H298" class="stroke-sand-100" stroke-width="1.5" />
+                <!-- Soft shadow under the roof edge -->
+                <rect x="182" y="202" width="116" height="6" fill="#000" opacity=".07" />
+
+                <!-- Stone base the house sits on -->
+                <rect x="176" y="302" width="128" height="20" class="fill-sand-300" />
+                <rect x="174" y="300" width="132" height="4" rx="2" class="fill-sand-500" />
+                <path d="M196 304v18M218 304v18M262 304v18M284 304v18M176 313H304" class="stroke-sand-400" stroke-width="1.5" />
+
+                <!-- Roof: shorter and in the logo colour (brand teal-blue), with tile lines and a dark trim -->
+                <path d="M172 202 240 162 308 202Z" class="fill-brand-600 stroke-brand-600" stroke-width="4" stroke-linejoin="round" />
+                <path d="M217 176H263M197 188H283" class="stroke-brand-500" stroke-width="2" stroke-linecap="round" />
+                <rect x="168" y="199" width="144" height="7" rx="3.5" class="fill-brand-800" />
+                <!-- Little round attic window -->
+                <circle cx="240" cy="182" r="8" fill="#bae6fd" class="stroke-white" stroke-width="2.5" />
+                <path d="M240 175v14M233 182h14" class="stroke-brand-700" stroke-width="1.5" />
+
+                <!-- Windows: light blue glass with a cross of lines, shutters on the sides, flower boxes below -->
+                <g class="fill-brand-500">
+                  <rect x="186" y="222" width="6" height="26" rx="1" />
+                  <rect x="222" y="222" width="6" height="26" rx="1" />
+                  <rect x="252" y="222" width="6" height="26" rx="1" />
+                  <rect x="288" y="222" width="6" height="26" rx="1" />
+                </g>
+                <rect x="194" y="222" width="26" height="26" rx="2" fill="#bae6fd" class="stroke-brand-700" stroke-width="3" />
+                <rect x="260" y="222" width="26" height="26" rx="2" fill="#bae6fd" class="stroke-brand-700" stroke-width="3" />
+                <path d="M207 222v26M194 235h26M273 222v26M260 235h26" class="stroke-brand-700" stroke-width="2" />
+                <path d="M198 226l6 0M264 226l6 0" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".8" />
+                <circle cx="199" cy="250" r="3" fill="#fb7185" />
+                <circle cx="207" cy="249" r="3" fill="#fbbf24" />
+                <circle cx="215" cy="250" r="3" fill="#a78bfa" />
+                <circle cx="265" cy="250" r="3" fill="#38bdf8" />
+                <circle cx="273" cy="249" r="3" fill="#fb7185" />
+                <circle cx="281" cy="250" r="3" fill="#fbbf24" />
+                <rect x="192" y="251" width="30" height="6" rx="1.5" class="fill-sand-600" />
+                <rect x="258" y="251" width="30" height="6" rx="1.5" class="fill-sand-600" />
+
+                <!-- Front door: a frame, a door with two panels, a handle, a little roof over it and a porch light -->
+                <rect x="221" y="258" width="38" height="44" rx="2" class="fill-brand-800" />
+                <rect x="225" y="262" width="30" height="40" rx="1.5" class="fill-sand-500" />
+                <rect x="229" y="266" width="22" height="13" rx="1.5" class="fill-sand-400" />
+                <rect x="229" y="284" width="22" height="13" rx="1.5" class="fill-sand-400" />
+                <circle cx="250" cy="282" r="2" class="fill-sand-100" />
+                <path d="M214 258h52l-6-8h-40Z" class="fill-brand-600" />
+                <circle cx="267" cy="270" r="3" fill="#fde68a" class="stroke-brand-800" stroke-width="1.5" />
+
+                <!-- Steps up to the front door (each one wider than the one above) -->
+                <rect x="221" y="302" width="38" height="7" fill="#cbd5e1" />
+                <rect x="221" y="302" width="38" height="2" fill="#f1f5f9" />
+                <rect x="215" y="309" width="50" height="7" fill="#cbd5e1" />
+                <rect x="215" y="309" width="50" height="2" fill="#f1f5f9" />
+                <rect x="209" y="316" width="62" height="6" fill="#cbd5e1" />
+                <rect x="209" y="316" width="62" height="2" fill="#f1f5f9" />
+              </g>
+
+              <!-- Bushes in front of the house, on each side of the steps. Each bush is 3 overlapping circles plus a light spot. -->
+              <g class="fill-brand-500">
+                <circle cx="176" cy="318" r="10" /><circle cx="194" cy="318" r="10" /><circle cx="185" cy="310" r="12" />
+                <circle cx="286" cy="318" r="10" /><circle cx="304" cy="318" r="10" /><circle cx="295" cy="310" r="12" />
+              </g>
+              <g class="fill-brand-400">
+                <circle cx="180" cy="306" r="4" /><circle cx="290" cy="306" r="4" />
+              </g>
+
+              <!-- Little hedge bushes along the top edge of the sidewalk -->
+              <g class="fill-brand-400">
+                <circle cx="66" cy="331" r="6" /><circle cx="80" cy="331" r="6" /><circle cx="73" cy="326" r="8" />
+                <circle cx="112" cy="331" r="6" /><circle cx="126" cy="331" r="6" /><circle cx="119" cy="326" r="8" />
+                <circle cx="354" cy="331" r="6" /><circle cx="368" cy="331" r="6" /><circle cx="361" cy="326" r="8" />
+                <circle cx="400" cy="331" r="6" /><circle cx="414" cy="331" r="6" /><circle cx="407" cy="326" r="8" />
+              </g>
+              <g class="fill-brand-300">
+                <circle cx="70" cy="323" r="2.5" /><circle cx="116" cy="323" r="2.5" /><circle cx="358" cy="323" r="2.5" /><circle cx="404" cy="323" r="2.5" />
+              </g>
+
+              <!-- Flowers by the house -->
+              <g class="stroke-brand-500" stroke-width="2" stroke-linecap="round">
+                <path d="M156 326v-12M168 326v-9M312 326v-9M324 326v-12" />
+              </g>
+              <circle cx="156" cy="312" r="5" fill="#fb7185" />
+              <circle cx="168" cy="315" r="4" fill="#fbbf24" />
+              <circle cx="312" cy="315" r="4" fill="#a78bfa" />
+              <circle cx="324" cy="312" r="5" fill="#38bdf8" />
+
+              <!-- Roommate 1 (with a backpack), coming from the left -->
+              <g transform="translate(-58 22)">
+                <g class="walker fill-brand-950 stroke-brand-950" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="131" y="220" width="12" height="32" rx="5" class="fill-brand-700 stroke-none" />
+                  <circle cx="153" cy="196" r="13" class="stroke-none" />
+                  <rect x="139" y="213" width="24" height="56" rx="11" class="stroke-none" />
+                  <path d="M152 264 162 293 170 320H180M147 264 138 293 126 316 134 320" fill="none" stroke-width="10" />
+                  <rect x="158" y="214" width="40" height="34" rx="3" class="fill-sand-400 stroke-none" />
+                  <rect x="174" y="214" width="8" height="34" class="fill-sand-300 stroke-none" />
+                  <path d="M153 222 162 250H190" fill="none" stroke-width="9" />
+                </g>
+              </g>
+
+              <!-- Roommate 2 (carrying a plant), coming from the right: the same drawing, mirrored -->
+              <g transform="translate(632 22) scale(-1 1)">
+                <g class="walker walker-2 fill-brand-950 stroke-brand-950" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M264 208c-7-18-2-30-10-40 13 3 18 22 10 40Zm2 0c4-16 14-24 24-26-4 12-12 22-24 26Z" class="fill-brand-500 stroke-none" />
+                  <circle cx="243" cy="196" r="13" class="stroke-none" />
+                  <rect x="229" y="213" width="24" height="56" rx="11" class="stroke-none" />
+                  <path d="M242 264 252 293 260 320H270M237 264 228 293 216 316 224 320" fill="none" stroke-width="10" />
+                  <rect x="248" y="208" width="42" height="40" rx="3" class="fill-sand-500 stroke-none" />
+                  <rect x="248" y="208" width="42" height="7" class="fill-sand-600 stroke-none" />
+                  <path d="M243 222 252 250H282" fill="none" stroke-width="9" />
+                </g>
+              </g>
+            </svg>
+          </div>
+
+          <div class="relative -mt-8 ms-auto me-[-0.5rem] w-64 rounded-2xl rounded-ee-md bg-brand-900 p-4 text-sm text-white shadow-xl sm:me-[-2rem]" aria-hidden="true">
+            <p class="mb-1 text-xs font-semibold text-brand-200">🤖 '3urfti Helper</p>
+            <p data-i18n="mock.bot">I found 3 roommates near your campus! 🎉</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== FEATURES ===================== -->
+    <section id="features" class="scroll-mt-16 border-y border-sand-100 bg-white py-20">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <div class="mx-auto max-w-2xl text-center">
+          <h2 class="text-3xl font-extrabold tracking-tight text-brand-950 sm:text-4xl" data-i18n="feat.title">Everything you need to feel at home</h2>
+          <p class="mt-3 text-lg text-slate-600" data-i18n="feat.sub">'3urfti brings housing, friendship and community together in one place.</p>
+        </div>
+        <div class="mt-12 grid gap-6 md:grid-cols-3">
+          <!-- Each card gets its own colour: teal, pink and violet -->
+          <article class="rounded-3xl border-2 border-teal-100 bg-teal-50 p-7 transition hover:-translate-y-1 hover:shadow-lg hover:shadow-teal-200/60">
+            <div class="grid h-12 w-12 place-items-center rounded-2xl bg-teal-500 text-2xl shadow-md shadow-teal-500/30">🏠</div>
+            <h3 class="mt-5 text-xl font-bold text-brand-950" data-i18n="feat.1.t">Compatible roommates</h3>
+            <p class="mt-2 text-slate-600" data-i18n="feat.1.d">Match on interests, campus and lifestyle — not just budget.</p>
+          </article>
+          <article class="rounded-3xl border-2 border-pink-100 bg-pink-50 p-7 transition hover:-translate-y-1 hover:shadow-lg hover:shadow-pink-200/60">
+            <div class="grid h-12 w-12 place-items-center rounded-2xl bg-pink-500 text-2xl shadow-md shadow-pink-500/30">🔒</div>
+            <h3 class="mt-5 text-xl font-bold text-brand-950" data-i18n="feat.2.t">Same-gender by design</h3>
+            <p class="mt-2 text-slate-600" data-i18n="feat.2.d">You only see and connect with students of your own gender. Privacy and comfort come first.</p>
+          </article>
+          <article class="rounded-3xl border-2 border-violet-100 bg-violet-50 p-7 transition hover:-translate-y-1 hover:shadow-lg hover:shadow-violet-200/60">
+            <div class="grid h-12 w-12 place-items-center rounded-2xl bg-violet-500 text-2xl shadow-md shadow-violet-500/30">🤖</div>
+            <h3 class="mt-5 text-xl font-bold text-brand-950" data-i18n="feat.3.t">A smart helper</h3>
+            <p class="mt-2 text-slate-600" data-i18n="feat.3.d">Our chatbot suggests matches, answers housing questions and shows you around the app.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== HOW IT WORKS ===================== -->
+    <section class="py-20">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <h2 class="text-center text-3xl font-extrabold tracking-tight text-brand-950 sm:text-4xl" data-i18n="steps.title">How '3urfti works</h2>
+        <ol class="mt-12 grid gap-6 md:grid-cols-3">
+          <li class="flex gap-4 rounded-3xl border-t-4 border-teal-400 bg-white p-6 shadow-sm">
+            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-teal-100 font-extrabold text-teal-700">1</span>
+            <div><h3 class="font-bold text-brand-950" data-i18n="steps.1.t">Create your profile</h3><p class="mt-1 text-slate-600" data-i18n="steps.1.d">Tell us your campus and what you love.</p></div>
+          </li>
+          <li class="flex gap-4 rounded-3xl border-t-4 border-amber-400 bg-white p-6 shadow-sm">
+            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-amber-100 font-extrabold text-amber-700">2</span>
+            <div><h3 class="font-bold text-brand-950" data-i18n="steps.2.t">Discover students</h3><p class="mt-1 text-slate-600" data-i18n="steps.2.d">Filter by age, university and interests.</p></div>
+          </li>
+          <li class="flex gap-4 rounded-3xl border-t-4 border-pink-400 bg-white p-6 shadow-sm">
+            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-pink-100 font-extrabold text-pink-700">3</span>
+            <div><h3 class="font-bold text-brand-950" data-i18n="steps.3.t">Ask to connect</h3><p class="mt-1 text-slate-600" data-i18n="steps.3.d">Send a request and start your next chapter.</p></div>
+          </li>
+        </ol>
+
+        <div class="mt-16 rounded-[2rem] bg-gradient-to-br from-brand-800 via-brand-600 to-indigo-600 px-6 py-12 text-center text-white shadow-xl shadow-brand-900/20 sm:px-12">
+          <h2 class="text-3xl font-extrabold" data-i18n="cta.title">Ready to find your people?</h2>
+          <p class="mt-2 text-brand-100" data-i18n="cta.sub">It's free and takes less than two minutes.</p>
+          <button type="button" data-auth="guest" data-open="signup-modal" class="mt-7 rounded-2xl bg-sand-400 px-8 py-4 text-lg font-bold text-brand-950 shadow-lg transition hover:-translate-y-0.5 hover:bg-sand-300" data-i18n="cta.btn">Create my account</button>
+          <a href="dashboard.html" data-auth="user" class="mt-7 hidden inline-block rounded-2xl bg-sand-400 px-8 py-4 text-lg font-bold text-brand-950 hover:bg-sand-300" data-i18n="nav.dashboard">Go to dashboard</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-sand-100 py-8 text-center text-sm text-slate-500">
+    <p data-i18n="footer.text">© 2026 '3urfti · Made with care for students</p>
+  </footer>
+
+  <!-- ===================== SIGN UP (2-step onboarding) ===================== -->
+  <div id="signup-modal" class="modal fixed inset-0 z-50 hidden items-end justify-center sm:items-center sm:p-4" role="dialog" aria-modal="true" aria-labelledby="signup-title">
+    <div class="absolute inset-0 bg-brand-950/50 backdrop-blur-sm" data-close></div>
+    <div class="relative max-h-[94vh] w-full overflow-y-auto rounded-t-3xl bg-white shadow-2xl sm:max-w-lg sm:rounded-3xl">
+      <div class="p-6 sm:p-8">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <p id="signup-step-label" class="text-sm font-semibold text-sand-600"></p>
+            <h2 id="signup-title" class="mt-1 text-2xl font-extrabold text-brand-950" data-i18n="signup.title">Create your '3urfti account</h2>
+          </div>
+          <button type="button" data-close class="rounded-xl p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700" data-i18n-aria="modal.close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" class="h-5 w-5"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+        </div>
+
+        <!-- progress bar -->
+        <div class="mt-5 grid grid-cols-2 gap-2">
+          <div>
+            <div id="bar-1" class="h-1.5 rounded-full bg-brand-600"></div>
+            <p class="mt-1.5 text-xs font-semibold text-brand-700" data-i18n="signup.step1">About you</p>
+          </div>
+          <div>
+            <div id="bar-2" class="h-1.5 rounded-full bg-slate-200"></div>
+            <p class="mt-1.5 text-xs font-semibold text-slate-400" id="bar-2-label" data-i18n="signup.step2">Campus & interests</p>
+          </div>
+        </div>
+
+        <form id="signup-form" class="mt-6" novalidate>
+          <!-- Step 1: About you -->
+          <div data-step="1" class="space-y-4">
+            <div>
+              <label for="su-name" class="mb-1.5 block text-sm font-semibold text-slate-700" data-i18n="f.fullName">Full name</label>
+              <input id="su-name" name="fullName" type="text" autocomplete="name" data-i18n-placeholder="f.fullNamePh" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-brand-400 focus:bg-white">
+              <p class="field-error mt-1 hidden text-sm text-rose-600" data-error-for="fullName"></p>
+            </div>
+            <div class="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label for="su-email" class="mb-1.5 block text-sm font-semibold text-slate-700" data-i18n="f.email">Email</label>
+                <input id="su-email" name="email" type="email" dir="ltr" autocomplete="email" placeholder="user@gmail.com" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-start outline-none focus:border-brand-400 focus:bg-white">
+                <p class="field-error mt-1 hidden text-sm text-rose-600" data-error-for="email"></p>
+              </div>
+              <div>
+                <label for="su-password" class="mb-1.5 block text-sm font-semibold text-slate-700" data-i18n="f.password">Password</label>
+                <input id="su-password" name="password" type="password" autocomplete="new-password" data-i18n-placeholder="f.passwordHint" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-brand-400 focus:bg-white">
+                <p class="field-error mt-1 hidden text-sm text-rose-600" data-error-for="password"></p>
+              </div>
+            </div>
+            <fieldset>
+              <legend class="mb-1.5 text-sm font-semibold text-slate-700" data-i18n="f.gender">Gender</legend>
+              <div class="grid grid-cols-2 gap-3">
+                <label class="flex cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-slate-200 px-4 py-3 font-semibold has-[:checked]:border-brand-500 has-[:checked]:bg-brand-50 has-[:checked]:text-brand-800">
+                  <input type="radio" name="gender" value="female" class="accent-brand-600"><span data-i18n="f.female">Female</span>
+                </label>
+                <label class="flex cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-slate-200 px-4 py-3 font-semibold has-[:checked]:border-brand-500 has-[:checked]:bg-brand-50 has-[:checked]:text-brand-800">
+                  <input type="radio" name="gender" value="male" class="accent-brand-600"><span data-i18n="f.male">Male</span>
+                </label>
+              </div>
+              <p class="field-error mt-1 hidden text-sm text-rose-600" data-error-for="gender"></p>
+              <p class="mt-2 rounded-xl bg-sand-50 px-3 py-2.5 text-sm text-sand-800" data-i18n="f.genderNote">🔒 For privacy, you'll only see and match with students of the same gender.</p>
+            </fieldset>
+            <div class="sm:w-1/2">
+              <label for="su-year" class="mb-1.5 block text-sm font-semibold text-slate-700" data-i18n="f.year">College year</label>
+              <!-- The choices (Freshman, Sophomore, …) are filled in by js/auth.js in the current language -->
+              <select id="su-year" name="year" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-brand-400 focus:bg-white"></select>
+              <p class="field-error mt-1 hidden text-sm text-rose-600" data-error-for="year"></p>
+            </div>
+          </div>
+
+          <!-- Step 2: Campus & interests -->
+          <div data-step="2" class="hidden space-y-5">
+            <!-- What you're looking for: the first question of step 2 -->
+            <fieldset>
+              <legend class="mb-2 text-sm font-semibold text-slate-700" data-i18n="f.lookingFor">I'm looking for</legend>
+              <div class="space-y-2">
+                <label class="flex cursor-pointer items-center gap-3 rounded-2xl border border-slate-200 p-3 transition hover:bg-slate-50 has-[:checked]:bg-brand-50 has-[:checked]:ring-2 has-[:checked]:ring-brand-500">
+                  <span class="text-2xl" aria-hidden="true">🏠</span>
+                  <span class="min-w-0 flex-1">
+                    <span class="block text-sm font-bold text-brand-950" data-i18n="lf.roommate">A roommate</span>
+                    <span class="block text-xs text-slate-500" data-i18n="lf.roommateHint">I want someone to share a home with.</span>
+                  </span>
+                  <input type="radio" name="lookingFor" value="roommate" class="h-5 w-5 shrink-0 accent-brand-600">
+                </label>
+                <label class="flex cursor-pointer items-center gap-3 rounded-2xl border border-slate-200 p-3 transition hover:bg-slate-50 has-[:checked]:bg-brand-50 has-[:checked]:ring-2 has-[:checked]:ring-brand-500">
+                  <span class="text-2xl" aria-hidden="true">🔑</span>
+                  <span class="min-w-0 flex-1">
+                    <span class="block text-sm font-bold text-brand-950" data-i18n="lf.place">A place to stay</span>
+                    <span class="block text-xs text-slate-500" data-i18n="lf.placeHint">I need somewhere to live.</span>
+                  </span>
+                  <input type="radio" name="lookingFor" value="place" class="h-5 w-5 shrink-0 accent-brand-600">
+                </label>
+                <label class="flex cursor-pointer items-center gap-3 rounded-2xl border border-slate-200 p-3 transition hover:bg-slate-50 has-[:checked]:bg-brand-50 has-[:checked]:ring-2 has-[:checked]:ring-brand-500">
+                  <span class="text-2xl" aria-hidden="true">🤝</span>
+                  <span class="min-w-0 flex-1">
+                    <span class="block text-sm font-bold text-brand-950" data-i18n="lf.friends">Friends</span>
+                    <span class="block text-xs text-slate-500" data-i18n="lf.friendsHint">I'm just here to meet people.</span>
+                  </span>
+                  <input type="radio" name="lookingFor" value="friends" class="h-5 w-5 shrink-0 accent-brand-600">
+                </label>
+                <label class="flex cursor-pointer items-center gap-3 rounded-2xl border border-slate-200 p-3 transition hover:bg-slate-50 has-[:checked]:bg-brand-50 has-[:checked]:ring-2 has-[:checked]:ring-brand-500">
+                  <span class="text-2xl" aria-hidden="true">✨</span>
+                  <span class="min-w-0 flex-1">
+                    <span class="block text-sm font-bold text-brand-950" data-i18n="lf.both">Roommate + friends</span>
+                    <span class="block text-xs text-slate-500" data-i18n="lf.bothHint">I want someone to live with and new friends.</span>
+                  </span>
+                  <input type="radio" name="lookingFor" value="both" class="h-5 w-5 shrink-0 accent-brand-600" checked>
+                </label>
+              </div>
+            </fieldset>
+            <!-- University: type to search. The list of matches comes from UI.searchBox (js/ui.js) -->
+            <div>
+              <label for="su-uni" class="mb-1.5 block text-sm font-semibold text-slate-700" data-i18n="f.university">University / campus</label>
+              <div class="relative">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="pointer-events-none absolute start-3.5 top-[1.6rem] h-5 w-5 -translate-y-1/2 text-slate-400"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                <input id="su-uni" type="search" data-i18n-placeholder="f.uniSearchPh" class="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pe-4 ps-11 outline-none focus:border-brand-400 focus:bg-white">
+              </div>
+              <p class="mt-1.5 text-xs text-slate-500" data-i18n="f.uniSearchHint">Can't find it? Type the full name and we'll use that.</p>
+              <p class="field-error mt-1 hidden text-sm text-rose-600" data-error-for="university"></p>
+            </div>
+            <!-- Major: type to search (optional) -->
+            <div>
+              <label for="su-major" class="mb-1.5 block text-sm font-semibold text-slate-700"><span data-i18n="f.major">Major</span> <span class="font-normal text-slate-400">· <span data-i18n="f.optional">optional</span></span></label>
+              <div class="relative">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="pointer-events-none absolute start-3.5 top-[1.6rem] h-5 w-5 -translate-y-1/2 text-slate-400"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                <input id="su-major" type="search" data-i18n-placeholder="f.majorPh" class="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pe-4 ps-11 outline-none focus:border-brand-400 focus:bg-white">
+              </div>
+              <p class="mt-1.5 text-xs text-slate-500" data-i18n="f.majorHint">Not in the list? Type it and pick “Use …”.</p>
+            </div>
+            <!-- Where are you from? (optional): pick a country or type a city -->
+            <div>
+              <label for="su-from" class="mb-1.5 block text-sm font-semibold text-slate-700"><span data-i18n="f.from">Where are you from?</span> <span class="font-normal text-slate-400">· <span data-i18n="f.optional">optional</span></span></label>
+              <div class="relative">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="pointer-events-none absolute start-3.5 top-[1.6rem] h-5 w-5 -translate-y-1/2 text-slate-400"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+                <input id="su-from" type="search" data-i18n-placeholder="f.fromPh" class="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pe-4 ps-11 outline-none focus:border-brand-400 focus:bg-white">
+              </div>
+            </div>
+            <!-- Monthly rent budget (optional): helps students looking for a roommate -->
+            <div>
+              <span class="block text-sm font-semibold text-slate-700"><span data-i18n="f.budget">Monthly rent budget (KD)</span> <span class="font-normal text-slate-400">· <span data-i18n="f.optional">optional</span></span></span>
+              <div class="mt-1.5 grid grid-cols-2 gap-2">
+              <label class="flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 focus-within:border-brand-400">
+                <span class="text-xs text-slate-400" data-i18n="range.from">From</span>
+                <input id="su-budget-min" type="number" min="0" step="10" inputmode="numeric" placeholder="100" class="w-full bg-transparent  outline-none">
+              </label>
+              <label class="flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 focus-within:border-brand-400">
+                <span class="text-xs text-slate-400" data-i18n="range.to">To</span>
+                <input id="su-budget-max" type="number" min="0" step="10" inputmode="numeric" placeholder="250" class="w-full bg-transparent  outline-none">
+              </label>
+            </div>
+              <label for="su-budget-currency" class="sr-only" data-i18n="f.currency">Currency</label>
+            <select id="su-budget-currency" class="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5  outline-none focus:border-brand-400"></select>
+            </div>
+            <fieldset>
+              <div class="mb-2 flex items-baseline justify-between gap-2">
+                <legend class="text-sm font-semibold text-slate-700"><span data-i18n="f.interests">Interests & hobbies</span> <span class="font-normal text-slate-400">· <span data-i18n="f.interestsHint">Pick at least 3</span></span></legend>
+                <span id="interest-count" class="shrink-0 text-xs font-semibold text-brand-700"></span>
+              </div>
+              <div id="interest-picker" class="flex flex-wrap gap-2"></div>
+              <p class="field-error mt-2 hidden text-sm text-rose-600" data-error-for="interests"></p>
+            </fieldset>
+          </div>
+
+          <div class="mt-7 flex gap-3">
+            <button type="button" id="signup-back" class="hidden rounded-xl border border-slate-200 px-5 py-3 font-semibold text-slate-700 hover:bg-slate-50" data-i18n="btn.back">Back</button>
+            <button type="submit" id="signup-submit" class="flex-1 rounded-xl bg-brand-600 px-5 py-3 font-bold text-white shadow-lg shadow-brand-600/25 hover:bg-brand-700 disabled:opacity-60" data-i18n="btn.next">Next</button>
+          </div>
+          <p class="mt-5 text-center text-sm text-slate-500">
+            <span data-i18n="signup.have">Already have an account?</span>
+            <button type="button" data-open="login-modal" class="font-semibold text-brand-700 hover:underline" data-i18n="nav.login">Log In</button>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== LOG IN ===================== -->
+  <div id="login-modal" class="modal fixed inset-0 z-50 hidden items-end justify-center sm:items-center sm:p-4" role="dialog" aria-modal="true" aria-labelledby="login-title">
+    <div class="absolute inset-0 bg-brand-950/50 backdrop-blur-sm" data-close></div>
+    <div class="relative max-h-[94vh] w-full overflow-y-auto rounded-t-3xl bg-white shadow-2xl sm:max-w-md sm:rounded-3xl">
+      <div class="p-6 sm:p-8">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <h2 id="login-title" class="text-2xl font-extrabold text-brand-950" data-i18n="login.title">Welcome back</h2>
+            <p class="mt-1 text-slate-500" data-i18n="login.sub">Log in to see students near your campus.</p>
+          </div>
+          <button type="button" data-close class="rounded-xl p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700" data-i18n-aria="modal.close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" class="h-5 w-5"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+        </div>
+
+        <form id="login-form" class="mt-6 space-y-4" novalidate>
+          <div>
+            <label for="li-email" class="mb-1.5 block text-sm font-semibold text-slate-700" data-i18n="f.email">Email</label>
+            <input id="li-email" name="email" type="email" dir="ltr" autocomplete="email" placeholder="user@gmail.com" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-start outline-none focus:border-brand-400 focus:bg-white">
+          </div>
+          <div>
+            <label for="li-password" class="mb-1.5 block text-sm font-semibold text-slate-700" data-i18n="f.password">Password</label>
+            <input id="li-password" name="password" type="password" autocomplete="current-password" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-brand-400 focus:bg-white">
+          </div>
+          <p id="login-error" class="hidden rounded-xl bg-rose-50 px-3 py-2.5 text-sm text-rose-700"></p>
+          <button type="submit" class="w-full rounded-xl bg-brand-600 px-5 py-3 font-bold text-white shadow-lg shadow-brand-600/25 hover:bg-brand-700" data-i18n="login.submit">Log In</button>
+        </form>
+
+        <div class="mt-6 rounded-2xl bg-sand-50 p-4">
+          <p class="text-sm font-semibold text-sand-800" data-i18n="login.demo">Just exploring? Try a demo account:</p>
+          <div class="mt-3 grid grid-cols-2 gap-2">
+            <button type="button" data-demo="f01" class="rounded-xl border border-sand-200 bg-white px-3 py-2.5 text-sm font-semibold text-brand-800 hover:border-brand-300" data-i18n="login.demoF">Demo (female)</button>
+            <button type="button" data-demo="m01" class="rounded-xl border border-sand-200 bg-white px-3 py-2.5 text-sm font-semibold text-brand-800 hover:border-brand-300" data-i18n="login.demoM">Demo (male)</button>
+          </div>
+        </div>
+
+        <p class="mt-5 text-center text-sm text-slate-500">
+          <span data-i18n="login.no">New to '3urfti?</span>
+          <button type="button" data-open="signup-modal" class="font-semibold text-brand-700 hover:underline" data-i18n="nav.signup">Sign Up</button>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>'3urfti — Discover</title>
+  <script>try { if (localStorage.getItem("3urfti.lang") === "ar") { document.documentElement.lang = "ar"; document.documentElement.dir = "rtl"; } } catch (e) {}</script>
+  <!-- Dark mode before the page draws (no white flash): your saved choice, or your device's setting -->
+  <script>try { var theme = localStorage.getItem("3urfti.theme"); if (theme === "dark" || (!theme && matchMedia("(prefers-color-scheme: dark)").matches)) document.documentElement.classList.add("dark"); } catch (e) {}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <script src="js/tailwind-config.js"></script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="min-h-screen bg-sand-50 font-sans text-slate-800 antialiased">
+
+  <!-- ===================== TOP BAR ===================== -->
+  <header class="sticky top-0 z-40 border-b border-sand-100 bg-white/90 backdrop-blur">
+    <nav class="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6">
+      <a href="index.html" class="flex items-center gap-2.5">
+        <span class="grid h-9 w-9 place-items-center rounded-xl bg-brand-600 text-white shadow-md shadow-brand-600/30"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg></span>
+        <span class="hidden leading-none sm:block">
+          <span dir="ltr" class="block text-xl font-extrabold tracking-tight text-brand-900">'3urfti</span>
+          <span class="block text-[11px] font-semibold text-sand-600" lang="ar">غرفتي</span>
+        </span>
+      </a>
+
+      <div class="flex items-center gap-2">
+        <!-- Opens "Requests & chats". The red number = new requests waiting for you -->
+        <button type="button" id="inbox-open" data-open="inbox-modal" class="relative inline-flex items-center gap-1.5 rounded-xl bg-brand-50 px-3 py-2 text-sm font-semibold text-brand-800 transition hover:bg-brand-100">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 21l1.9-5.4A8 8 0 1 1 21 12Z"/></svg>
+          <span class="hidden md:inline" data-i18n="nav.requests">Requests & chats</span>
+          <span id="req-count" class="hidden h-5 min-w-[1.25rem] place-items-center rounded-full bg-rose-500 px-1.5 text-xs text-white">0</span>
+        </button>
+        <!-- Dark / light mode -->
+        <button type="button" data-theme-toggle class="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-sand-200 bg-white text-brand-800 hover:border-brand-300">
+          <svg class="theme-moon h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+          <svg class="theme-sun h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        </button>
+        <button type="button" data-lang-toggle class="inline-flex items-center gap-1.5 rounded-xl border border-sand-200 bg-white px-3 py-2 text-sm font-semibold text-brand-800 hover:border-brand-300">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>
+          <span data-i18n="lang.switch">العربية</span>
+        </button>
+        <div class="flex items-center gap-2 rounded-xl border border-slate-100 py-1 pe-1 ps-1 sm:ps-1">
+          <!-- Click your own icon to customize it -->
+          <button type="button" id="me-avatar" data-open="look-modal" class="relative rounded-full transition hover:scale-105" data-i18n-aria="look.title" aria-label="Customize your look"></button>
+          <span id="me-name" class="hidden max-w-[10rem] truncate text-sm font-semibold text-slate-700 lg:block"></span>
+          <button type="button" id="logout" class="rounded-lg px-2.5 py-1.5 text-sm font-semibold text-slate-500 hover:bg-slate-100 hover:text-slate-800" data-i18n="nav.logout">Log out</button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="mx-auto max-w-7xl px-4 pb-32 pt-8 sm:px-6">
+    <!-- Welcome -->
+    <section class="mb-8 flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <p class="text-sm font-bold uppercase tracking-wider text-sand-600" data-i18n="dash.title">Discover</p>
+        <h1 id="hello" class="mt-1 text-3xl font-extrabold tracking-tight text-brand-950 sm:text-4xl"></h1>
+        <p class="mt-2 text-slate-600" data-i18n="dash.sub">Here are students from your community you might click with.</p>
+      </div>
+      <button type="button" data-open="look-modal" class="inline-flex items-center gap-2 rounded-2xl bg-white px-4 py-2.5 text-sm font-bold text-brand-800 shadow-sm ring-1 ring-brand-100 transition hover:-translate-y-0.5 hover:ring-brand-300">
+        <span aria-hidden="true">🎨</span><span data-i18n="look.button">Customize my look</span>
+      </button>
+    </section>
+
+    <div id="discover-layout" class="grid gap-6 lg:grid-cols-[310px_1fr] lg:items-start">
+
+      <!-- ===================== SEARCH & FILTER PANEL ===================== -->
+      <aside id="filter-panel" class="relative rounded-3xl border border-sand-100 bg-white p-5 shadow-sm lg:sticky lg:top-24">
+        <!-- Arrow on the panel's edge (big screens): pushes the panel to the side, or brings it back -->
+        <button type="button" id="panel-toggle" aria-expanded="true" aria-controls="panel-content"
+          class="absolute -end-4 top-5 z-10 hidden h-9 w-9 place-items-center rounded-full border border-sand-200 bg-white text-brand-700 shadow-md transition hover:scale-110 hover:bg-brand-50 lg:grid">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 rtl:-scale-x-100"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <!-- Only shows when the panel is pushed to the side -->
+        <span id="panel-label" class="hidden" data-i18n="filter.title">Search & filter</span>
+
+        <div id="panel-content">
+        <!-- Looking for: at the very top, so it's the first choice (and always visible on phones) -->
+        <fieldset class="mb-4">
+          <legend class="text-sm font-semibold text-slate-700" data-i18n="filter.looking">Looking for</legend>
+          <div class="mt-1.5 grid grid-cols-2 gap-1 rounded-xl bg-slate-100 p-1 text-sm font-semibold">
+            <label class="cursor-pointer rounded-lg px-2 py-2 text-center text-slate-600 has-[:checked]:bg-white has-[:checked]:text-brand-800 has-[:checked]:shadow-sm"><input type="radio" name="looking" value="" class="sr-only" checked><span data-i18n="filter.any">Anyone</span></label>
+            <label class="cursor-pointer rounded-lg px-2 py-2 text-center text-slate-600 has-[:checked]:bg-white has-[:checked]:text-brand-800 has-[:checked]:shadow-sm"><input type="radio" name="looking" value="roommate" class="sr-only"><span data-i18n="filter.roommate">Roommate</span></label>
+            <label class="cursor-pointer rounded-lg px-2 py-2 text-center text-slate-600 has-[:checked]:bg-white has-[:checked]:text-brand-800 has-[:checked]:shadow-sm"><input type="radio" name="looking" value="place" class="sr-only"><span data-i18n="filter.place">Place to stay</span></label>
+            <label class="cursor-pointer rounded-lg px-2 py-2 text-center text-slate-600 has-[:checked]:bg-white has-[:checked]:text-brand-800 has-[:checked]:shadow-sm"><input type="radio" name="looking" value="friends" class="sr-only"><span data-i18n="lf.friends">Friends</span></label>
+          </div>
+        </fieldset>
+
+        <div class="relative">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="pointer-events-none absolute start-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="f-search" type="search" data-i18n-placeholder="filter.search" class="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pe-4 ps-11 outline-none focus:border-brand-400 focus:bg-white">
+        </div>
+
+        <button type="button" id="filters-toggle" aria-expanded="false" aria-controls="filters-body" class="mt-3 flex w-full items-center justify-between rounded-xl bg-brand-50 px-4 py-2.5 font-semibold text-brand-800 lg:hidden">
+          <span data-i18n="filter.toggle">Filters</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" class="h-5 w-5"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+        </button>
+
+        <div id="filters-body" class="hidden lg:block">
+          <h2 class="mt-5 hidden text-lg font-bold text-brand-950 lg:block" data-i18n="filter.title">Search & filter</h2>
+
+          <!-- College year -->
+          <div class="mt-5">
+            <label for="f-year" class="text-sm font-semibold text-slate-700" data-i18n="filter.year">College year</label>
+            <select id="f-year" class="mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-brand-400"></select>
+          </div>
+
+          <!-- Budget: monthly rent range in KD -->
+          <div class="mt-5">
+            <span class="text-sm font-semibold text-slate-700" data-i18n="filter.budget">Budget (KD / month)</span>
+            <div class="mt-1.5 grid grid-cols-2 gap-2">
+              <label class="flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 focus-within:border-brand-400">
+                <span class="text-xs text-slate-400" data-i18n="range.from">From</span>
+                <input id="f-budget-min" type="number" min="0" step="10" inputmode="numeric" placeholder="0" class="w-full bg-transparent text-sm outline-none">
+              </label>
+              <label class="flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 focus-within:border-brand-400">
+                <span class="text-xs text-slate-400" data-i18n="range.to">To</span>
+                <input id="f-budget-max" type="number" min="0" step="10" inputmode="numeric" placeholder="500" class="w-full bg-transparent text-sm outline-none">
+              </label>
+            </div>
+            <label for="f-budget-currency" class="sr-only" data-i18n="f.currency">Currency</label>
+            <select id="f-budget-currency" class="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:border-brand-400"></select>
+            <p class="mt-1.5 text-xs text-slate-500" data-i18n="filter.budgetHint">Shows students whose budget overlaps this range.</p>
+          </div>
+
+          <!-- University: type to search (js/ui.js → UI.searchBox) -->
+          <div class="mt-5">
+            <label for="f-uni" class="text-sm font-semibold text-slate-700" data-i18n="filter.uni">University</label>
+            <div class="relative mt-1.5">
+              <input id="f-uni" type="search" data-i18n-placeholder="filter.uniPh" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-brand-400 focus:bg-white">
+            </div>
+          </div>
+
+          <!-- Major: type to search -->
+          <div class="mt-5">
+            <label for="f-major" class="text-sm font-semibold text-slate-700" data-i18n="filter.major">Major</label>
+            <div class="relative mt-1.5">
+              <input id="f-major" type="search" data-i18n-placeholder="filter.majorPh" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-brand-400 focus:bg-white">
+            </div>
+          </div>
+
+          <!-- Gender: locked to the student's own gender -->
+          <div class="mt-5">
+            <span class="text-sm font-semibold text-slate-700" data-i18n="filter.gender">Gender</span>
+            <div class="mt-1.5 flex items-center gap-2 rounded-xl border border-brand-100 bg-brand-50 px-3 py-2.5 text-sm font-semibold text-brand-800" aria-describedby="gender-tip">
+              <span id="f-gender-icon"></span><span id="f-gender-label"></span>
+            </div>
+            <p id="gender-tip" class="mt-1.5 text-xs text-slate-500" data-i18n="filter.genderTip">Gender separation is always on to protect your privacy.</p>
+          </div>
+
+          <!-- Interests -->
+          <div class="mt-5">
+            <span class="text-sm font-semibold text-slate-700" data-i18n="filter.interests">Interests</span>
+            <p class="text-xs text-slate-500" data-i18n="filter.interestsHint">Shows students who like any of these</p>
+            <div id="f-interests" class="mt-2 flex flex-wrap gap-1.5"></div>
+          </div>
+
+          <button type="button" id="f-reset" class="mt-6 w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-50" data-i18n="filter.reset">Reset filters</button>
+        </div>
+        </div>
+      </aside>
+
+      <!-- ===================== RESULTS ===================== -->
+      <section aria-live="polite">
+        <div class="mb-4 flex flex-wrap items-baseline justify-between gap-2">
+          <p id="results-count" class="font-bold text-brand-950"></p>
+          <p class="text-sm text-slate-500" data-i18n="results.sorted">Sorted by best match</p>
+        </div>
+        <div id="results-grid" class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3"></div>
+        <div id="results-empty" class="hidden rounded-3xl border-2 border-dashed border-sand-200 bg-white px-6 py-14 text-center">
+          <p class="text-4xl" aria-hidden="true">🔍</p>
+          <p class="mt-3 font-bold text-brand-950" data-i18n="results.empty">No students match those filters yet.</p>
+          <p class="mt-1 text-slate-500" data-i18n="results.emptyHint">Try removing an interest or widening the age range.</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- ===================== EXPANDED PROFILE (modal) ===================== -->
+  <div id="profile-modal" class="modal fixed inset-0 z-50 hidden items-end justify-center sm:items-center sm:p-4" role="dialog" aria-modal="true" aria-labelledby="profile-name">
+    <div class="absolute inset-0 bg-brand-950/50 backdrop-blur-sm" data-close></div>
+    <div class="relative max-h-[94vh] w-full overflow-y-auto rounded-t-3xl bg-white shadow-2xl sm:max-w-2xl sm:rounded-3xl">
+      <div id="profile-body"></div>
+    </div>
+  </div>
+
+  <!-- ===================== CUSTOMIZE MY LOOK (modal) ===================== -->
+  <div id="look-modal" class="modal fixed inset-0 z-50 hidden items-end justify-center sm:items-center sm:p-4" role="dialog" aria-modal="true" aria-labelledby="look-title">
+    <div class="absolute inset-0 bg-brand-950/50 backdrop-blur-sm" data-close></div>
+    <div class="relative max-h-[94vh] w-full overflow-y-auto rounded-t-3xl bg-white p-6 shadow-2xl sm:max-w-lg sm:rounded-3xl sm:p-8">
+      <div class="flex items-start justify-between gap-3">
+        <div>
+          <h2 id="look-title" class="text-2xl font-extrabold text-brand-950" data-i18n="look.title">Customize your look</h2>
+          <p class="mt-1 text-sm text-slate-500" data-i18n="look.sub">Pick your icon and colours. Changes save straight away.</p>
+        </div>
+        <button type="button" data-close class="rounded-xl p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700" data-i18n-aria="modal.close" aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" class="h-5 w-5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Live preview: your icon on your chosen background -->
+      <div id="look-preview" class="mt-5 flex items-center gap-4 rounded-2xl border border-slate-100 p-4"></div>
+
+      <!-- Your own profile photo (free): shown in your round icon instead of an emoji -->
+      <h3 class="mt-6 text-sm font-bold text-brand-950" data-i18n="look.photo">Your photo</h3>
+      <div id="look-photo" class="mt-2"></div>
+      <p class="mt-1.5 flex items-center gap-1.5 text-xs text-slate-500"><span aria-hidden="true">🔒</span><span data-i18n="look.photoHint">Only students of your own gender can see your photo.</span></p>
+      <input type="file" id="photo-upload" accept="image/*" class="hidden">
+
+      <!-- Where you're from (optional): shows on your card as "📍 From …" -->
+      <label for="look-from" class="mt-6 block text-sm font-bold text-brand-950"><span data-i18n="look.from">Where you're from</span> <span class="font-normal text-slate-400">· <span data-i18n="f.optional">optional</span></span></label>
+      <div class="relative mt-2">
+        <input id="look-from" type="search" data-i18n-placeholder="f.fromPh" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm outline-none focus:border-brand-400 focus:bg-white">
+      </div>
+      <p class="mt-1.5 text-xs text-slate-500" data-i18n="look.fromHint">Pick a country or type your city. Empty the box to remove it.</p>
+
+      <!-- Monthly rent budget (optional): shows on your card as "💰 150–250 KD / month" -->
+      <span class="mt-6 block text-sm font-bold text-brand-950"><span data-i18n="look.budget">Monthly rent budget (KD)</span> <span class="font-normal text-slate-400">· <span data-i18n="f.optional">optional</span></span></span>
+      <div class="mt-1.5 grid grid-cols-2 gap-2">
+              <label class="flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 focus-within:border-brand-400">
+                <span class="text-xs text-slate-400" data-i18n="range.from">From</span>
+                <input id="look-budget-min" type="number" min="0" step="10" inputmode="numeric" placeholder="100" class="w-full bg-transparent text-sm outline-none">
+              </label>
+              <label class="flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 focus-within:border-brand-400">
+                <span class="text-xs text-slate-400" data-i18n="range.to">To</span>
+                <input id="look-budget-max" type="number" min="0" step="10" inputmode="numeric" placeholder="250" class="w-full bg-transparent text-sm outline-none">
+              </label>
+            </div>
+            <label for="look-budget-currency" class="sr-only" data-i18n="f.currency">Currency</label>
+            <select id="look-budget-currency" class="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:border-brand-400"></select>
+      <p class="mt-1.5 text-xs text-slate-500" data-i18n="look.budgetHint">Helps roommates find you. Empty both boxes to remove it.</p>
+
+      <h3 class="mt-6 text-sm font-bold text-brand-950" data-i18n="look.icon">Your icon</h3>
+      <div id="look-icons" class="mt-2 grid grid-cols-6 gap-2"></div>
+
+      <h3 class="mt-6 text-sm font-bold text-brand-950" data-i18n="look.color">Icon colour</h3>
+      <div id="look-colors" class="mt-2 flex flex-wrap gap-3"></div>
+
+      <h3 class="mt-6 text-sm font-bold text-brand-950" data-i18n="look.background">Page background</h3>
+      <div id="look-backgrounds" class="mt-2 grid grid-cols-4 gap-2"></div>
+
+      <!-- Premium backgrounds: locked with a 🔒 until the student pays -->
+      <div class="mt-6 flex items-center justify-between gap-2">
+        <h3 class="text-sm font-bold text-brand-950"><span data-i18n="look.premium">Premium backgrounds</span> <span aria-hidden="true">✨</span></h3>
+        <button type="button" id="look-premium-badge" class="rounded-full bg-gradient-to-r from-amber-400 to-pink-500 px-3 py-1 text-xs font-bold text-white shadow-sm transition hover:scale-105 disabled:cursor-default disabled:from-emerald-500 disabled:to-emerald-500 disabled:hover:scale-100"></button>
+      </div>
+      <div id="look-premium" class="mt-2 grid grid-cols-3 gap-2"></div>
+      <button type="button" id="look-upload-new" class="mt-2 hidden text-xs font-semibold text-brand-700 hover:underline" data-i18n="look.uploadNew">📷 Upload a different photo</button>
+      <!-- Hidden file picker: opens when the student clicks "Upload your own photo" -->
+      <input type="file" id="bg-upload" accept="image/*" class="hidden">
+
+      <button type="button" data-close class="mt-7 w-full rounded-xl bg-brand-600 px-5 py-3 font-bold text-white shadow-lg shadow-brand-600/25 hover:bg-brand-700" data-i18n="look.done">Done</button>
+    </div>
+  </div>
+
+  <!-- ===================== PREMIUM (modal) =====================
+       Pretend checkout: no card details are asked for and no real money moves.
+       It sits above "Customize your look" (z-[60] is higher than z-50). -->
+  <div id="premium-modal" class="modal fixed inset-0 z-[60] hidden items-end justify-center sm:items-center sm:p-4" role="dialog" aria-modal="true" aria-labelledby="premium-title">
+    <div class="absolute inset-0 bg-brand-950/50 backdrop-blur-sm" data-close></div>
+    <div class="relative max-h-[94vh] w-full overflow-y-auto rounded-t-3xl bg-white shadow-2xl sm:max-w-md sm:rounded-3xl">
+      <div class="bg-animated relative px-6 pb-6 pt-8 text-center sm:px-8" style="background: linear-gradient(120deg, #c7f0e8, #dbeafe, #f5d0fe, #fde68a, #c7f0e8)">
+        <button type="button" data-close class="absolute end-3 top-3 rounded-xl p-2 text-slate-500 hover:bg-white/60 hover:text-slate-800" data-i18n-aria="modal.close" aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" class="h-5 w-5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+        <p class="text-4xl" aria-hidden="true">✨</p>
+        <h2 id="premium-title" class="mt-2 text-2xl font-extrabold text-brand-950" data-i18n="prem.title">'3urfti Premium</h2>
+        <p class="mt-1 text-sm text-slate-700" data-i18n="prem.sub">Make your page truly yours with moving colours and patterns.</p>
+      </div>
+      <div class="p-6 sm:p-8">
+        <div id="premium-tiles" class="grid grid-cols-3 gap-2"></div>
+        <ul class="mt-5 space-y-2 text-sm text-slate-700">
+          <li class="flex gap-2"><span class="text-emerald-600" aria-hidden="true">✓</span><span data-i18n="prem.perk1">6 premium backgrounds + your own photo as a background</span></li>
+          <li class="flex gap-2"><span class="text-emerald-600" aria-hidden="true">✓</span><span data-i18n="prem.perk2">Pay once, keep them forever</span></li>
+          <li class="flex gap-2"><span class="text-emerald-600" aria-hidden="true">✓</span><span data-i18n="prem.perk3">Helps keep '3urfti free for every student</span></li>
+        </ul>
+        <button type="button" id="premium-buy" class="mt-6 w-full rounded-xl bg-gradient-to-r from-amber-500 to-pink-500 px-5 py-3.5 font-bold text-white shadow-lg shadow-pink-500/25 transition hover:-translate-y-0.5 disabled:translate-y-0 disabled:opacity-70"></button>
+        <p class="mt-3 text-center text-xs text-slate-500" data-i18n="prem.demo">Demo only: no real money is taken.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== REQUESTS & CHATS (modal) ===================== -->
+  <div id="inbox-modal" class="modal fixed inset-0 z-50 hidden items-end justify-center sm:items-center sm:p-4" role="dialog" aria-modal="true" aria-labelledby="inbox-title">
+    <div class="absolute inset-0 bg-brand-950/50 backdrop-blur-sm" data-close></div>
+    <div class="relative flex h-[88vh] w-full flex-col overflow-hidden rounded-t-3xl bg-white shadow-2xl sm:h-[620px] sm:max-h-[90vh] sm:max-w-lg sm:rounded-3xl">
+
+      <!-- List view: Sent / Received / Chats tabs -->
+      <div id="inbox-list-view" class="flex min-h-0 flex-1 flex-col">
+        <div class="flex items-start justify-between gap-3 px-6 pt-6">
+          <h2 id="inbox-title" class="text-2xl font-extrabold text-brand-950" data-i18n="inbox.title">Requests & chats</h2>
+          <button type="button" data-close class="rounded-xl p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700" data-i18n-aria="modal.close" aria-label="Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" class="h-5 w-5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <div id="inbox-tabs" role="tablist" class="mx-6 mt-4 grid grid-cols-3 gap-1 rounded-xl bg-slate-100 p-1 text-sm font-semibold"></div>
+        <div id="inbox-list" class="min-h-0 flex-1 space-y-2 overflow-y-auto px-6 py-4"></div>
+      </div>
+
+      <!-- Chat view: one conversation -->
+      <div id="inbox-chat-view" class="hidden min-h-0 flex-1 flex-col">
+        <div class="flex items-center gap-3 border-b border-slate-100 px-4 py-3">
+          <button type="button" id="chat-back" class="rounded-xl p-2 text-slate-500 hover:bg-slate-100" data-i18n-aria="inbox.back" aria-label="Back">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 rtl:-scale-x-100"><path d="m15 18-6-6 6-6"/></svg>
+          </button>
+          <div id="chat-who" class="flex min-w-0 flex-1 items-center gap-3"></div>
+          <button type="button" data-close class="rounded-xl p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700" data-i18n-aria="modal.close" aria-label="Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" class="h-5 w-5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <div id="chat-log" class="min-h-0 flex-1 space-y-2 overflow-y-auto bg-sand-50/70 p-4" aria-live="polite"></div>
+        <form id="chat-form" class="flex items-center gap-2 border-t border-slate-100 p-3">
+          <input id="chat-input" type="text" autocomplete="off" maxlength="500" data-i18n-placeholder="inbox.typeMsg" class="flex-1 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none focus:border-brand-400 focus:bg-white">
+          <button type="submit" class="grid h-11 w-11 place-items-center rounded-xl bg-brand-600 text-white hover:bg-brand-700" data-i18n-aria="bot.send" aria-label="Send">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 rtl:-scale-x-100"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== CHATBOT ===================== -->
+  <button type="button" id="bot-fab" aria-controls="bot-panel" aria-expanded="false" data-i18n-aria="bot.open" class="fixed bottom-5 end-5 z-40 grid h-16 w-16 place-items-center rounded-full bg-brand-600 text-white shadow-2xl shadow-brand-600/40 transition hover:scale-105 hover:bg-brand-700">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-7 w-7"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 21l1.9-5.4A8 8 0 1 1 21 12Z"/><path d="M8.5 11h.01M12 11h.01M15.5 11h.01"/></svg>
+    <span class="absolute -top-0.5 end-0 h-4 w-4 rounded-full border-2 border-white bg-sand-400"></span>
+  </button>
+
+  <section id="bot-panel" role="dialog" aria-labelledby="bot-title" class="fixed bottom-0 end-0 z-50 hidden h-[85vh] w-full flex-col overflow-hidden rounded-t-3xl border border-sand-100 bg-white shadow-2xl sm:bottom-24 sm:end-5 sm:h-[600px] sm:max-h-[calc(100vh-8rem)] sm:w-[390px] sm:rounded-3xl">
+    <header class="flex items-center gap-3 bg-brand-900 px-4 py-3.5 text-white">
+      <div class="grid h-10 w-10 place-items-center rounded-full bg-brand-600 text-xl">🤖</div>
+      <div class="flex-1">
+        <h2 id="bot-title" class="font-bold" data-i18n="bot.title">'3urfti Helper</h2>
+        <p class="flex items-center gap-1.5 text-xs text-brand-200"><span class="h-2 w-2 rounded-full bg-emerald-400"></span><span data-i18n="bot.status">Online · replies instantly</span></p>
+      </div>
+      <button type="button" id="bot-close" class="rounded-xl p-2 text-brand-100 hover:bg-white/10" data-i18n-aria="bot.close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" class="h-5 w-5"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </header>
+
+    <div id="bot-log" class="flex-1 space-y-3 overflow-y-auto bg-sand-50/70 p-4" aria-live="polite"></div>
+
+    <div class="no-scrollbar flex gap-2 overflow-x-auto border-t border-sand-100 px-3 py-2.5">
+      <button type="button" data-bot-chip="match" class="shrink-0 rounded-full border border-brand-200 bg-brand-50 px-3 py-1.5 text-sm font-semibold text-brand-800 hover:bg-brand-100" data-i18n="chip.match">Suggest matches</button>
+      <button type="button" data-bot-chip="connect" class="shrink-0 rounded-full border border-brand-200 bg-brand-50 px-3 py-1.5 text-sm font-semibold text-brand-800 hover:bg-brand-100" data-i18n="chip.connect">How do I connect?</button>
+      <button type="button" data-bot-chip="housing" class="shrink-0 rounded-full border border-brand-200 bg-brand-50 px-3 py-1.5 text-sm font-semibold text-brand-800 hover:bg-brand-100" data-i18n="chip.housing">Housing tips</button>
+      <button type="button" data-bot-chip="safety" class="shrink-0 rounded-full border border-brand-200 bg-brand-50 px-3 py-1.5 text-sm font-semibold text-brand-800 hover:bg-brand-100" data-i18n="chip.safety">Safety tips</button>
+      <button type="button" data-bot-chip="gender" class="shrink-0 rounded-full border border-brand-200 bg-brand-50 px-3 py-1.5 text-sm font-semibold text-brand-800 hover:bg-brand-100" data-i18n="chip.gender">Who can I see?</button>
+    </div>
+
+    <form id="bot-form" class="flex items-center gap-2 border-t border-sand-100 p-3">
+      <input id="bot-input" type="text" autocomplete="off" data-i18n-placeholder="bot.placeholder" class="flex-1 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none focus:border-brand-400 focus:bg-white">
+      <button type="submit" class="grid h-11 w-11 place-items-center rounded-xl bg-brand-600 text-white hover:bg-brand-700" data-i18n-aria="bot.send">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 rtl:-scale-x-100"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </form>
+  </section>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/inbox.js"></script>
+  <script src="js/chatbot.js"></script>
+</body>
+</html>
